@@ -1,5 +1,7 @@
 from urllib.request import urlopen
 import re
+import sys
+from pprint import pprint as pp
 
 def getHtml(url):
     sock = urlopen(url)
@@ -15,6 +17,10 @@ def findLinks(url, regex=False):
         for line in lines:
             links.append(line.split('>')[0])
     else:
-        m = '(?i)<a([^>]+)>(.+?)</a>'
+        m = '(?i)<a href="(https:\/\/|http:\/\/|\/)(.+?)"\s*'
         links = re.findall(m, htmlSource)
     return links
+
+if __name__ == '__main__':
+    website = sys.argv[1]
+    pp(findLinks(website, True))
