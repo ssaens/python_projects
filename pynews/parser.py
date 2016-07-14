@@ -18,7 +18,6 @@ class CNNArticleParser(HTMLParser):
             self.active_state = 'headline'
         elif ('class', 'zn-body__paragraph') in attrs:
             self.active_state = 'body'
-            print('triggered')
         elif tag == 'p' and ('class', 'update-time') in attrs:
             self.active_state = 'time'
         elif tag == 'span' and ('class', 'metadata__byline__author') in attrs:
@@ -64,7 +63,7 @@ class CNNArticleParser(HTMLParser):
         return '\n\n'.join(self.content)
 
     def parse_authors(self, raw_text):
-        m = re.compile('By (.*).*')
+        m = re.compile('By (.*) .*')
 
 
 class CNNHomeParser(HTMLParser):
