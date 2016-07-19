@@ -7,14 +7,8 @@ import functools
 import time
 
 class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
+    DIR = '\033[94m'
     ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
 
 def compare(s1, s2):
     s1 = s1[1]
@@ -41,7 +35,7 @@ def trace(directory, tabs, order, show_size, depth, color, show_time):
             space = '   ' * tabs
             if os.path.isdir(fullpath):
                 if color:
-                    print('{0}+- {1}{2}{3}'.format(space, bcolors.OKBLUE, item, bcolors.ENDC))
+                    print('{0}+- {1}{2}{3}'.format(space, bcolors.DIR, item, bcolors.ENDC))
                 else:
                     print('{0}+- {1}'.format(space, item))
                 if depth > 0:
