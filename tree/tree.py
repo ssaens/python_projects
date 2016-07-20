@@ -41,7 +41,9 @@ def trace(directory, tabs, order, show_size, depth, color, show_time):
                 if depth > 0:
                     trace(fullpath, tabs + 1, order, show_size, depth - 1, color, show_time)
             else:
-                if not os.path.islink(fullpath):
+                if os.path.islink(fullpath):
+                    item = '[link] ' + item
+                else:
                     (mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime) = os.stat(fullpath)
                     if show_time:
                         item = '[{0}] {1}'.format(time.ctime(mtime), item)
