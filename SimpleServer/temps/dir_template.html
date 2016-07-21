@@ -1,0 +1,44 @@
+<HTML>
+  <head>
+    <Title> <!--TITLE--> </Title>
+  </head>
+
+  <body>
+    <h1> <!--IPADDRESS--> </h1>
+    <div class='directory_name'>
+      <h2> At: <!--DIRECTORY--> </h2>
+    </div>
+    <div class='directory_items'>
+      <table style="width:100%">
+        <tr>
+          <th>Name</th>
+          <th>Size</th>
+          <th>Last Modified</th>
+          <th></th>
+        </tr>
+
+        <tr>
+          <th><a href=#>Test</a></th>
+          <th>testsize</th>
+          <th>testtime</th>
+          <th><button type='button'>raw</th>
+        </tr>
+
+        <!--<tr>
+          <th><a href=PATH>ITEM</a></th>
+          <th>ITEMSIZE</th>
+          <th>MTIME</th>
+          <th><button type='button'>raw</th>
+        </tr>-->
+
+      </table>
+    </div>
+    <div class='upload'>
+      <form action='/cgi-bin/upload.py' method='post' enctype="multipart/form-data">
+        <input type='textfield' name='name'>
+        <input type="file" id='userfile' name="userfile" size="40">
+        <input type='submit' value-'upload' name='submit'>
+      </form>
+    </div>
+  </body>
+</HTML>

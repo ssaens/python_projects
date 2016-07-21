@@ -6,11 +6,13 @@ import socket
 import re
 import response
 
-__root = '/Users/Min/projects/python_projects/SimpleServer'
+__root = '.'
 
 def handleRequest(sock):
     status_code = 200
     request = sock.recv(2048).decode()
+    request += sock.recv(2048).decode()
+    request += sock.recv(2048).decode()
     if request:
         params = parse(request)
         path = params['path']
@@ -55,7 +57,7 @@ def parse(request):
 
     for i in range(1, len(attributes)):
         line = attributes[i]
-        match = re.match('(.*):(.*)', line)
+        match = re.match('(.*?):(.*)', line)
         if match:
             params[match.group(1)] = match.group(2)
 
@@ -75,18 +77,15 @@ def generate_dir_html(path, directory):
     html += '</ul></body></HTML>'
     return html
 
-def startServer():
+if __name__ == '__main__':
     port = int(argv[1])
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((socket.gethostname(), port))
     s.listen(5)
-    print('server started on port %d'%port)
+    print('server started on {0}:{1}'.format(socket.gethostbyname(socket.gethostname()), port))
 
     while True:
         clientSock, clientAddr = s.accept()
         t = Thread(target=handleRequest, args=(clientSock,))
         t.start()
-
-if __name__ == '__main__':
-    startServer()
