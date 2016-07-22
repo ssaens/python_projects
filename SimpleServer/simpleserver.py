@@ -1,3 +1,5 @@
+#!Users/Min/anaconda3/bin/python
+
 from threading import Thread
 from sys import argv
 import os
@@ -6,18 +8,15 @@ import socket
 import re
 import response
 
-__root = '.'
 
 def handleRequest(sock):
     status_code = 200
     request = sock.recv(2048).decode()
-    request += sock.recv(2048).decode()
-    request += sock.recv(2048).decode()
     if request:
         params = parse(request)
         path = params['path']
         resource = params['resource']
-        print('path: ' + path)
+        print('path:', path)
         print('resource: %s\n'%resource)
 
         content = ''
@@ -48,7 +47,7 @@ def parse(request):
     method, resource, version = attributes[0].split()
     while resource.startswith('/'):
         resource = resource[1:]
-    path = os.path.join(__root, resource)
+    path = os.path.join(_root, resource)
     params =    {'method' : method.strip(),
                 'path' : path.strip(),
                 'resource' : resource.strip(),
@@ -66,24 +65,51 @@ def parse(request):
 def generate_dir_html(path, directory):
     if directory.endswith('/'):
         directory = directory[:-1]
+
+    with open('./temps/dir_template.html') as dir_template:
+        html = dir_template.read()
+
     subdirs = os.listdir(path)
-    html = '<HTML><head><title>{0}</title></head><body><h2>{0}</h2><ul>'.format(directory)
+    with open('./temps/table_row.html') as row_template:
+        template = row_template.read()
+
+    table_rows = []
     for subdir in subdirs:
-        if directory:
-            link = '/{0}/{1}'.format(directory, subdir)
-        else:
-            link = '{0}/{1}'.format(directory, subdir)
-        html += '<li><a href=\"{0}\">{1}</a></li>'.format(link, subdir)
-    html += '</ul></body></HTML>'
+        fullpath = os.path.join(directory, subdir)
+        (mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime) = os.stat(fullpath)
+        link = template.replace('MTIME', time.ctime(mtime))
+        link = link.replace('SIZE', str(size))
+        link = link.replace('ITEM', subdir)
+        link = link.replace('PATH', os.path.join(fullpath))
+        table_rows.append(link)
+    links = '\n'.join(table_rows)
+
+    directory = 'Root' if not directory else directory
+
+    html = html.replace('<!--ITEMS-->', links)
+    html = html.replace('<!--DIRECTORY-->', directory)
+    html = html.replace('<!--TITLE-->', 'Yaolink')
+
     return html
 
 if __name__ == '__main__':
-    port = int(argv[1])
+    port = 9000
+    if len(argv) > 1:
+        port = int(argv[1])
+
+    _root = os.getcwd()
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((socket.gethostname(), port))
-    s.listen(5)
-    print('server started on {0}:{1}'.format(socket.gethostbyname(socket.gethostname()), port))
+    for i in range(10):
+        try:
+            s.bind((socket.gethostname(), port))
+            s.listen(5)
+            break
+        except:
+            port += 1
+
+    ip = '{0}:{1}'.format(socket.gethostbyname(socket.gethostname()), port)
+    print('server started on', ip)
 
     while True:
         clientSock, clientAddr = s.accept()
