@@ -1,0 +1,177 @@
+body {
+    background-color: #181a2d;
+}
+
+h2 {
+    font-size: 30px;
+    margin: 4px 0px;
+}
+
+h3 {
+    font-size: 20;
+    margin: 4px 0px;
+}
+
+table {
+    width: 85%;
+    border-collapse: collapse;
+    min-width: 550px;
+    overflow-x: auto;
+}
+
+th, td {
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #933532;
+    color: white;
+}
+
+td.name {
+    text-align: left;
+    vertical-align: middle;
+}
+
+th.button_col {
+    text-align: center;
+    vertical-align: middle;
+}
+
+td.button_cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2}
+tr:nth-child(odd) {background-color: #ffffff}
+tr:hover {
+    background-color: #e0e0e0;
+}
+
+div.directory_name {
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: underline;
+    color: white;
+    padding-top: 20px;
+    padding-left: 5%;
+    padding-bottom: 10px;
+}
+
+div.directory_items {
+    padding-top: 5px;
+    padding-bottom: 10px;
+    margin: 5px;
+}
+
+div.upload {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    margin-top:10px;
+    margin-left: 7.5%;
+    margin-right: 7.5%;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 5%;
+    padding-bottom: 20px;
+    outline: solid;
+}
+
+a:link, a:visited {
+    color: red;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+a:hover, a:active {
+    color: green;
+    text-decoration: underline;
+    font-weight: 500;
+    transition: 0.5s;
+}
+
+button.raw, button.download {
+    display: inline-block;
+    border-radius: 4px;
+    background-color: #933532;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 28px;
+    padding: 8px;
+    width: 80px;
+    transition: all 0s;
+    cursor: pointer;
+    margin: 5px;
+}
+
+button.download {
+    width: 120px;
+}
+
+.raw span, .download span {
+    font-size: 12;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.raw span:after {
+    font-family: FontAwesome;
+    content: "\f0f6";
+    position: absolute;
+    padding-top: 2px;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.download span:after {
+    font-family: FontAwesome;
+    content: "\f0ab";
+    position: absolute;
+    padding-top: 2px;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.raw:hover span, .download:hover span {
+    padding-right: 18px;
+}
+
+.raw:hover span:after, .download:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+input[type=submit] {
+    background-color: #933532;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-decoration: none;
+    font-size: 12;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+input[type=submit]:hover, button:hover {
+    background-color: #65be68;
+    transition: 0.3s;
+}
+
+input[type=file]: {
+    box-sizing: padding-box;
+}
