@@ -1,3 +1,4 @@
+from url import URL
 import re
 
 class Request:
@@ -9,10 +10,14 @@ class Request:
 
     def parse(self):
         lines = self.raw_request.split('\r\n')
-        request_line = lines.pop(0).split(' ')
-        self.method = request_line[0]
-        self.uri = request_line[1]
-        self.http_ver = request_line[2]
+        self.content = lines[:]
+
+        self.head = lines.pop(0)
+        header = self.head.split(' ')
+        self.method = header.pop(0)
+        self.http_ver = header.pop()
+        self.uri = URL(' '.join(header))
+
         headers = dict()
         for line in lines:
             match = re.match('(.*?):(.*)', line)

@@ -1,7 +1,8 @@
 import time
 
+status_codes = {100:'100 CONTINUE', 101:'101 SWITCHING PROTOCOLS', 200:'200 OK', 201:'201 CREATED', 400:'400 BAD REQUEST', 404:'404 NOT FOUND', 403:'403 FORBIDDEN'}
+
 class Response:
-    status_codes = {100:'100 CONTINUE', 101:'101 SWITCHING PROTOCOLS', 200:'200 OK', 201:'201 CREATED', 400:'400 BAD REQUEST', 404:'404 NOT FOUND', 403:'403 FORBIDDEN'}
 
     def __init__(self, status_code, content, filename):
         self.filename = filename
@@ -10,10 +11,9 @@ class Response:
         self.contenttype = 'text/html'
         self.size = len(content)
         self.getType()
-        self.header = [ 'HTTP/1.1 %s'%self.status_codes[self.status_code],
+        self.header = [ 'HTTP/1.1 %s'%status_codes[self.status_code],
                         'Date: ' + time.strftime('%a, %d %b %Y %H:%M:%S GMT+8', time.gmtime()),
                         'Content-Type: %s'%self.contenttype,
-                        'Connection: keep-alive',
                         'Content-Length: %d'%self.size,
                     ]
 

@@ -1,26 +1,17 @@
 from request import Request
 from threading import Thread
-from pagegen import generate_page
+import pagegen import generate_page
 import response
 import socket
 import sys
 import os
 import re
 
-root_dir = os.getcwd()
 default_port = 9000
-req_type_to_func = None
+
 
 def main():
-    global req_type_to_func
-
-    server_dir = os.getcwd()
-    req_type_to_func = {
-        'GET' : get_request,
-        'POST' : post_request,
-        'HEAD' : head_request,
-    }
-
+    print('starting...')
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     port = default_port
     for i in range(10):
@@ -42,9 +33,15 @@ def main():
 
 def handleRequest(client_sock):
     raw_req = receive(client_sock)
-    req = Request(raw_req)
-    to_send = req_type_to_func[req.method](req)
-    respond(client_sock, to_send)
+    if raw_req:
+        try:
+            req = Request(raw_req)
+            req.uri.root_with(root_dir)
+            print(req, end='\n\n')
+            response = req_type_to_func[req.method](req)
+        except:
+            response = response.Response(403)
+        respond(client_sock, response)
 
 def receive(client_sock):
     raw_req = client_sock.recv(2048)
@@ -55,13 +52,19 @@ def respond(client_sock, data):
     client_sock.shutdown(1)
     client_sock.close()
 
+'''
+---------------
+REQUEST METHODS
+---------------
+'''
+
 def get_request(req):
-    resource = req.uri
-    print('GET request for', resource)
-    while resource.startswith('/'):
-        resource = resource[1:]
-    fullpath = os.path.join(root_dir, resource)
-    resp = response.Response(201, generate_page(fullpath, resource), resource)
+    resource = req.uri.resource
+    page = generate_page(req.uri)
+    if req.uri.prefix == 'p':
+        resp = response.Response(201, page, resource)
+    elif req.uri.prefix == 'r' or req-uri-prefix == 'd':
+        resp = response.Response(200, page, resource)
     return resp.encode()
 
 def post_request(req):
@@ -70,6 +73,23 @@ def post_request(req):
 
 def head_request(req):
     return
+
+
+root_dir = os.getcwd()
+def find_server_path():
+    server_dir = ''
+    for a, b in zip(os.getcwd(), root_dir):
+        if not a == b:
+            server_dir += a
+    return server_dir
+server_dir = find_server_path()
+
+req_type_to_func = {
+    'GET' : get_request,
+    'POST' : post_request,
+    'HEAD' : head_request,
+    'OPTIONS': option_request,
+}
 
 if __name__ == '__main__':
     main()
