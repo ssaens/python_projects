@@ -1,0 +1,37 @@
+<HTML>
+    <head>
+        <script src="https://use.fontawesome.com/d59afdec51.js"></script>
+        <link rel="icon" type="icon/x-icon" href="/favicon.ico">
+        <link rel="stylesheet" type="text/css" href="/r//Users/Min/projects/python_projects/yaolink/css/directory.css">
+        <Title> YaoLink </Title>
+    </head>
+
+    <body>
+        <div class='directory_name'>
+            <span class='directory_icon'></span>
+            <h2><!--DIRECTORY--></h2>
+        </div>
+        <div class='directory_items'>
+            <center>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Last Modified</th>
+                        <th class='button_col'>Raw Text</th>
+                        <th class='button_col'>Download File</th>
+                    </tr>
+                    <!--ITEMS-->
+                </table>
+            </center>
+        </div>
+        <div class='upload'>
+            <h3> Upload: </h3>
+            <form action='/cgi-bin/upload.py' method='post' enctype="multipart/form-data">
+                <input type="file" id='userfile' name="userfile" size="10000">
+                <input type='textfield' id='testtext' name='testtext' size='20'>
+                <input type='submit' value='upload' name='submit'>
+            </form>
+        </div>
+    </body>
+</HTML>
