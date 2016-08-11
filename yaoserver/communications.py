@@ -1,5 +1,5 @@
-import re
 import time
+import re
 import mimetypes
 
 status_codes = {100:'100 Continue',
@@ -27,9 +27,9 @@ class Request:
         self.head = lines.pop(0)
 
         header = self.head.split(' ')
-        self.method = header.pop(0)
-        self.http_ver = header.pop()
-        self.uri = ' '.join(header)
+        self.method = header[0]
+        self.http_ver = header[-1]
+        self.uri = header[1].replace('%20', ' ')
         while self.uri.startswith('/'):
             self.uri = self.uri[1:]
 
@@ -67,12 +67,15 @@ class Response:
         self.body = ''
 
     def encode(self):
-        self.head = self.header + '\r\n'.join(self.headers)
-        response = self.head + '\r\n\r\n' + self.body + '\r\n\r\n'
-        return response.encode()
+        self.head = self.header + '\r\n'.join(self.headers) + '\r\n\r\n'
+        if type(self.body) == bytes:
+            response = self.head.encode() + self.body + '\r\n'.encode('UTF-8')
+        else:
+            response = (self.head + self.body + '\r\n').encode('UTF-8')
+        return response
 
     def __str__(self):
-        return self.header + '\r\n'.join(self.headers)
+        return self.header
 
 
 def uri(pattern, handler):
