@@ -1,8 +1,8 @@
 import time
 import os
 
-root = '/Users/Min/projects/'
-app_root = '/Users/Min/projects/python_projects/yaolink/'
+root = '/Users/dillon/projects/'
+app_root = '/Users/dillon/projects/python/yaolink/'
 
 def gen_home(resource, req, res):
     print('home')
@@ -14,6 +14,8 @@ def gen_page(resource, req, res):
         if os.path.isfile(resource):
             generate_file_page(resource, req, res)
         elif os.path.isdir(resource):
+            if not resource.endswith('/'):
+                resource += '/'
             generate_dir_page(resource, req, res)
         res.set_code(201)
     else:
@@ -52,12 +54,21 @@ def get_prof(resource, req, res):
 def generate_dir_page(resource, req, res):
     rel_path = resource[len(root):]
 
-    with open('/Users/Min/projects/python_projects/yaolink/temps/dir_template.html') as fh:
+    with open('/Users/dillon/projects/python/yaolink/temps/dir_template.html') as fh:
         html = fh.read()
-    with open('/Users/Min/projects/python_projects/yaolink/temps/table_row.html') as fh:
+    with open('/Users/dillon/projects/python/yaolink/temps/table_row.html') as fh:
         row_template = fh.read()
 
     links = ''
+
+    if rel_path:
+        links = row_template.replace('MTIME', '')
+        links = links.replace('SIZE', '')
+        links = links.replace('ITEM', '..')
+        links = links.replace('PATH', '/p/' + os.path.dirname(rel_path[:-1]))
+        links = links.replace('<!--DIRSTART', '')
+        links = links.replace('DIREND-->', '')
+
     subdirs = os.listdir(resource)
 
     for subdir in subdirs:
@@ -87,14 +98,15 @@ def generate_dir_page(resource, req, res):
     res.set_body('page.html', html)
 
 def generate_file_page(resource, req, res):
-    with open('/Users/Min/projects/python_projects/yaolink/temps/file_template.html') as fh:
+    with open('/Users/dillon/projects/python/yaolink/temps/file_template.html') as fh:
         html = fh.read()
     lines = ''
     with open(resource) as fh:
         for ind, line in enumerate(fh):
-            lines += '<tr><td>{0}</td><td>{1}</td></tr>\n'.format(ind+1, line)
+            lines += '<tr><td>{0}</td><td><pre>{1}</pre></td></tr>\n'.format(ind+1, line)
     html = html.replace('<!--FILE-->', os.path.basename(resource))
     html = html.replace('<!--LINES-->', lines)
+    html = html.replace('PARENT', '/p/' +  os.path.dirname(resource[len(root):]))
     res.set_body('.html', html)
     res.set_code(201)
 
