@@ -1,7 +1,7 @@
 from communications import Request, Response
 from threading import Thread
 from time import gmtime, strftime
-from dbconnect import TableInserter
+# from dbconnect import TableInserter
 import socket
 import sys
 import re
@@ -29,10 +29,11 @@ def init():
         raise Exception('Invalid Application Root')
 
     try:
-        global connection_logger, req_logger, res_logger
-        connection_logger = TableInserter()
-        req_logger = TableInserter()
-        res_logger = TableInserter()
+        pass
+        # global connection_logger, req_logger, res_logger
+        # connection_logger = TableInserter()
+        # req_logger = TableInserter()
+        # res_logger = TableInserter()
     except Exception as e:
         print('Warning: MySQL Inserter Failed to instantiate')
         print(str(e))
