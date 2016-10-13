@@ -1,32 +1,45 @@
-import random
+import argparse
+import os
+from sys import argv
 
-class MarkovBot:
+def main(file_path, num_lines):
+    with open(file_path) as fh:
+        text = fh.read().strip()
 
-    def __init__(self):
-        self.chain = dict()
+    chain = analyze(text)
+    start = chain.random()
+    while not start[1].endswith('.'):
+        start = chain.random()
+    lines = walk(chain, start. num_lines)
 
-    def feed_file(self, file_path):
-        with open(file_path) as fh:
-            self.feed_str(fh.read())
+def analyze(text):
+    m = MarkovChain()
+    for src1, src2, dst in zip(text, text[1:], text[2:]):
+        m.add_link((src1, src2), dst)
+    return m
 
-    def feed_str(self, string):
-        tokens = string.split()
-        for i in range(len(tokens) - 2):
-            a, b = tokens[i], tokens[i + 1]
-            c = tokens[i + 2]
-            if (a, b) in self.chain:
-                self.chain[(a, b)].append(c)
-            else:
-                self.chain[(a, b)] = [c]
+def walk(chain, src, num_lines):
+    lines = list()
+    current_line = ' '.join(src)
+    while len(lines) < num_lines:
+        current_word = chain.next(src)
+        current_line += ' ' + current_word
+        src = (src[1], current_word)
+        
+        if current_word.endswith('.'):
+            lines.append(current_line)
+            current_line = ' '.join(src)
 
-    def out(self, l):
-        start = random.choice(list(self.chain.keys()))
-        out = start[0] + ' ' + start[1]
-        for i in range(l):
-            nxt = random.choice(self.chain[start])
-            out += ' ' + nxt
-            start = (start[1], nxt)
-        return out
-
-    def reset(self):
-        self.chain = dict();
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Specify read path and output length')
+    parser.add_argument('-f', '--file', dest='file_path', type=str, default='shakespeare.txt', help='sets root directory')
+    parser.add_argument('-l', '--lines', dest='num_lines', type=int, default=4, help='sets number of lines to display')
+    args = parse.parse_args()
+    if not os.path.isfile(args.file_path):
+        print('{0} does not exist'.format(file_path))
+    elif lines < 0:
+        print('please enter a positive line number')
+    elif lines > 50:
+        print('max line length exceeded')
+    else:
+        main(args.file_path, args.num_lines)
