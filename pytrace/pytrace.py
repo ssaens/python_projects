@@ -31,7 +31,7 @@ class RayRenderer(entity.Renderer):
                 o = vec3(x, y, camera.position.z)
                 d = vec3(x, y, camera.position.z - 1) - o
                 color = cast(entity.Ray(o, d), scene)
-                # frame_buffer[j * width + i] = color
+                frame_buffer[j * width + i] = color
 
     def cast(self, ray, scene):
         t, e = self.trace(ray, scene.entities[entity.Entity.NAMES.GEOMETRY])
